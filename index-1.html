@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>தமிழ்நாடு வரலாறு Quiz — Tamil Nadu Heritage Challenge</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Tamil:wght@500;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Spectral:wght@400;500;600&display=swap');
+
+  :root{
+    --stone: #241209;
+    --stone-2: #34190d;
+    --bronze: #c9922e;
+    --bronze-bright: #e8b458;
+    --terracotta: #b5482f;
+    --palm: #eee2c4;
+    --palm-dim: #d8c79f;
+    --temple-green: #3c5c42;
+    --ok: #4f7a52;
+    --bad: #a03a2c;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html,body{
+    margin:0; padding:0; min-height:100vh;
+    background:
+      radial-gradient(ellipse at 50% -10%, #4a2412 0%, transparent 60%),
+      repeating-linear-gradient(115deg, rgba(201,146,46,0.035) 0px, rgba(201,146,46,0.035) 2px, transparent 2px, transparent 22px),
+      var(--stone);
+    color: var(--palm);
+    font-family: 'Spectral', serif;
+  }
+
+  .wrap{
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 28px 18px 60px;
+  }
+
+  /* ---- Gopuram header ---- */
+  .gopuram{
+    position:relative;
+    text-align:center;
+    padding: 18px 10px 22px;
+    margin-bottom: 22px;
+  }
+  .tiers{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    margin: 0 auto 10px;
+  }
+  .tier{
+    height: 8px;
+    background: linear-gradient(90deg, transparent, var(--bronze) 15%, var(--bronze-bright) 50%, var(--bronze) 85%, transparent);
+    border-radius: 2px;
+    opacity: 0.85;
+  }
+  .tier:nth-child(1){ width: 30%; }
+  .tier:nth-child(2){ width: 46%; }
+  .tier:nth-child(3){ width: 64%; }
+  .tier:nth-child(4){ width: 84%; }
+  .tier:nth-child(5){ width: 100%; }
+
+  h1.title{
+    font-family: 'Noto Serif Tamil', serif;
+    font-weight: 900;
+    font-size: clamp(26px, 6vw, 40px);
+    letter-spacing: 0.5px;
+    margin: 6px 0 2px;
+    color: var(--bronze-bright);
+    text-shadow: 0 2px 0 rgba(0,0,0,0.4);
+  }
+  .subtitle{
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--palm-dim);
+    letter-spacing: 0.3px;
+  }
+  .divider{
+    width: 120px; height: 2px; margin: 14px auto 0;
+    background: linear-gradient(90deg, transparent, var(--terracotta), transparent);
+  }
+
+  /* ---- Panels ---- */
+  .panel{
+    background: linear-gradient(180deg, rgba(238,226,196,0.05), rgba(238,226,196,0.02));
+    border: 1px solid rgba(201,146,46,0.35);
+    border-radius: 6px;
+    padding: 26px 22px;
+    position: relative;
+  }
+  .panel::before, .panel::after{
+    content:"";
+    position:absolute; width:14px; height:14px;
+    border: 2px solid var(--bronze);
+    opacity: 0.6;
+  }
+  .panel::before{ top:-1px; left:-1px; border-right:none; border-bottom:none; }
+  .panel::after{ bottom:-1px; right:-1px; border-left:none; border-top:none; }
+
+  /* ---- Intro screen ---- */
+  #intro p{ line-height: 1.7; font-size: 16px; color: var(--palm); }
+  #intro .facts{
+    display:flex; gap:14px; flex-wrap:wrap;
+    margin: 18px 0 8px;
+  }
+  .fact-pill{
+    font-family:'Cormorant Garamond', serif;
+    font-size: 15px;
+    padding: 6px 14px;
+    border: 1px solid rgba(201,146,46,0.4);
+    border-radius: 20px;
+    color: var(--bronze-bright);
+  }
+
+  button.start-btn, .action-btn{
+    margin-top: 20px;
+    background: linear-gradient(180deg, var(--bronze-bright), var(--bronze));
+    color: var(--stone);
+    border: none;
+    font-family: 'Noto Serif Tamil', serif;
+    font-weight: 700;
+    font-size: 17px;
+    padding: 13px 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    box-shadow: 0 3px 0 #8a651e, 0 6px 14px rgba(0,0,0,0.35);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  button.start-btn:hover, .action-btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 5px 0 #8a651e, 0 10px 18px rgba(0,0,0,0.4);
+  }
+  button.start-btn:active, .action-btn:active{
+    transform: translateY(1px);
+    box-shadow: 0 2px 0 #8a651e;
+  }
+
+  /* ---- Quiz screen ---- */
+  .progress-row{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom: 16px;
+    font-family:'Cormorant Garamond', serif;
+    font-size: 15px;
+    color: var(--palm-dim);
+  }
+  .progress-track{
+    height: 6px; background: rgba(238,226,196,0.12);
+    border-radius: 4px; overflow:hidden; flex:1; margin: 0 14px;
+  }
+  .progress-fill{
+    height:100%;
+    background: linear-gradient(90deg, var(--terracotta), var(--bronze-bright));
+    width: 0%;
+    transition: width 0.35s ease;
+  }
+  .score-tag{
+    font-family:'Noto Serif Tamil', serif;
+    font-weight:700;
+    color: var(--bronze-bright);
+    white-space: nowrap;
+  }
+
+  .q-eyebrow{
+    font-family:'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--terracotta);
+    font-size: 15px;
+    margin-bottom: 6px;
+    letter-spacing: 0.4px;
+  }
+  .q-text{
+    font-family:'Noto Serif Tamil', serif;
+    font-weight: 700;
+    font-size: clamp(19px, 4vw, 23px);
+    line-height: 1.45;
+    margin: 0 0 20px;
+    color: var(--palm);
+  }
+
+  .options{
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .opt{
+    display:flex; align-items:center; gap:12px;
+    background: rgba(238,226,196,0.04);
+    border: 1px solid rgba(201,146,46,0.3);
+    border-radius: 5px;
+    padding: 13px 16px;
+    cursor:pointer;
+    font-size: 16px;
+    color: var(--palm);
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  }
+  .opt:hover{
+    background: rgba(201,146,46,0.12);
+    border-color: var(--bronze-bright);
+  }
+  .opt .letter{
+    font-family:'Noto Serif Tamil', serif;
+    font-weight:700;
+    color: var(--bronze-bright);
+    border: 1px solid var(--bronze);
+    border-radius: 50%;
+    width: 26px; height: 26px;
+    display:flex; align-items:center; justify-content:center;
+    font-size: 13px;
+    flex-shrink:0;
+  }
+  .opt.correct{
+    background: rgba(79,122,82,0.28);
+    border-color: var(--ok);
+  }
+  .opt.correct .letter{ border-color: var(--ok); color: #bfe6c0; }
+  .opt.wrong{
+    background: rgba(160,58,44,0.28);
+    border-color: var(--bad);
+  }
+  .opt.wrong .letter{ border-color: var(--bad); color: #f2b8ac; }
+  .opt.disabled{ cursor: default; pointer-events:none; }
+
+  .feedback{
+    margin-top: 16px;
+    font-family:'Cormorant Garamond', serif;
+    font-size: 16px;
+    min-height: 24px;
+    color: var(--palm-dim);
+  }
+  .feedback.good{ color: #9ed7a0; }
+  .feedback.bad{ color: #e79e8e; }
+
+  .next-row{ display:flex; justify-content:flex-end; margin-top: 14px; }
+
+  /* ---- Result screen ---- */
+  #result{ text-align:center; }
+  .medal{
+    font-size: 54px;
+    margin-bottom: 6px;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+  }
+  .reward-title{
+    font-family:'Noto Serif Tamil', serif;
+    font-weight: 900;
+    font-size: clamp(24px, 6vw, 32px);
+    color: var(--bronze-bright);
+    margin: 4px 0 6px;
+  }
+  .reward-sub{
+    font-family:'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--palm-dim);
+    margin-bottom: 18px;
+  }
+  .score-big{
+    font-family:'Noto Serif Tamil', serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--palm);
+    margin-bottom: 20px;
+  }
+  .score-big span{ color: var(--bronze-bright); }
+
+  .certificate{
+    border: 2px solid var(--bronze);
+    border-radius: 6px;
+    padding: 22px 18px;
+    margin: 18px 0 22px;
+    background: rgba(201,146,46,0.06);
+    position: relative;
+  }
+  .certificate::before, .certificate::after{
+    content:"";
+    position:absolute; width:14px; height:14px;
+    border: 2px solid var(--bronze);
+  }
+  .certificate::before{ top:6px; left:6px; border-right:none; border-bottom:none; }
+  .certificate::after{ bottom:6px; right:6px; border-left:none; border-top:none; }
+  .cert-label{
+    font-family:'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--palm-dim);
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .cert-name{
+    font-family:'Noto Serif Tamil', serif;
+    font-weight: 900;
+    font-size: 26px;
+    color: var(--bronze-bright);
+    margin: 8px 0;
+  }
+
+  .btn-row{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+  footer{
+    text-align:center; margin-top: 26px;
+    font-family:'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(216,199,159,0.5);
+  }
+
+  .hidden{ display:none !important; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="gopuram">
+    <div class="tiers">
+      <div class="tier"></div><div class="tier"></div><div class="tier"></div><div class="tier"></div><div class="tier"></div>
+    </div>
+    <h1 class="title">தமிழ்நாடு வரலாறு சவால்</h1>
+    <div class="subtitle">The Tamil Nadu Heritage Challenge — Kings, Kingdoms &amp; Progress</div>
+    <div class="divider"></div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="panel" id="intro">
+    <p>Journey through two thousand years of the Tamil land — from the Sangam-age chieftains to the great Chola, Chera, Pandya and Pallava dynasties, through Vijayanagara and Nayak rule, to the freedom struggle and modern Tamil Nadu's growth.</p>
+    <div class="facts">
+      <span class="fact-pill">30 Questions</span>
+      <span class="fact-pill">Kings &amp; Dynasties</span>
+      <span class="fact-pill">Development &amp; Culture</span>
+      <span class="fact-pill">Earn a Title</span>
+    </div>
+    <p style="margin-top:14px;">Enter your name to receive your certificate at the end of the challenge.</p>
+    <input id="playerName" type="text" placeholder="Your name"
+      style="width:100%; padding:12px 14px; font-size:16px; font-family:'Spectral',serif; background:rgba(238,226,196,0.06); border:1px solid rgba(201,146,46,0.4); border-radius:4px; color:var(--palm); margin-top:8px;">
+    <br>
+    <button class="start-btn" onclick="startQuiz()">Begin the Challenge →</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="panel hidden" id="quizScreen">
+    <div class="progress-row">
+      <span id="qCounter">Question 1 / 30</span>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <span class="score-tag" id="liveScore">Score: 0</span>
+    </div>
+    <div class="q-eyebrow" id="qEra">Sangam Era</div>
+    <div class="q-text" id="qText">Loading…</div>
+    <div class="options" id="optionsBox"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="next-row">
+      <button class="action-btn hidden" id="nextBtn" onclick="nextQuestion()">Next →</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="panel hidden" id="result">
+    <div class="medal" id="medalIcon">🏆</div>
+    <div class="reward-title" id="rewardTitle">Chola Emperor</div>
+    <div class="reward-sub" id="rewardSub">Master of the Heritage Challenge</div>
+    <div class="score-big">You scored <span id="finalScore">0</span> / 30</div>
+
+    <div class="certificate">
+      <div class="cert-label">Certificate of Achievement</div>
+      <div class="cert-name" id="certName">Player</div>
+      <div style="font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--palm-dim); font-size:15px;" id="certDesc">
+        has earned the title of Chola Emperor in the Tamil Nadu Heritage Challenge
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="action-btn" onclick="restartQuiz()">Play Again</button>
+    </div>
+  </div>
+
+  <footer>வாழ்க தமிழ்! — Long live Tamil heritage</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  {era:"Sangam Era", q:"The Sangam Age Tamil kingdoms are traditionally referred to as which 'three crowned' dynasties?", opts:["Chola, Chera, Pandya","Chola, Pallava, Pandya","Chera, Pallava, Rashtrakuta","Pandya, Kadamba, Chola"], a:0},
+  {era:"Sangam Era", q:"Which academy of Tamil poets and scholars flourished in ancient Madurai under Pandya patronage?", opts:["Sangam Academy","Nalanda Academy","Takshashila Academy","Ghatika Academy"], a:0},
+  {era:"Sangam Era", q:"Who is the author of the earliest known Tamil grammar treatise, the Tolkappiyam?", opts:["Tolkappiyar","Thiruvalluvar","Ilango Adigal","Sekkizhar"], a:0},
+  {era:"Sangam Era", q:"The Tamil ethical classic 'Tirukkural' containing 1330 couplets was written by whom?", opts:["Thiruvalluvar","Kambar","Avvaiyar","Bharathiyar"], a:0},
+  {era:"Chola Dynasty", q:"Which Chola king is credited with building the great Brihadeeswarar Temple at Thanjavur?", opts:["Rajaraja Chola I","Rajendra Chola I","Karikala Chola","Kulothunga Chola I"], a:0},
+  {era:"Chola Dynasty", q:"Rajendra Chola I led a famous naval expedition across the Bay of Bengal against which kingdom?", opts:["Srivijaya","Angkor","Champa","Majapahit"], a:0},
+  {era:"Chola Dynasty", q:"The Chola dynasty is especially known for pioneering which system of governance at the village level?", opts:["Local self-government (village assemblies / Kudavolai)","Feudal land grants only","Direct imperial rule with no local bodies","Military governorships"], a:0},
+  {era:"Chola Dynasty", q:"Which Chola king took the title 'Gangaikonda Chola' after a victorious campaign to the Ganges?", opts:["Rajendra Chola I","Rajaraja Chola I","Aditya Chola I","Vijayalaya Chola"], a:0},
+  {era:"Chola Dynasty", q:"The exquisite bronze sculptures of Nataraja (dancing Shiva) are most associated with which dynasty's art?", opts:["Chola","Pallava","Pandya","Nayak"], a:0},
+  {era:"Chola Dynasty", q:"Who founded the imperial Chola line by capturing Thanjavur in the 9th century CE?", opts:["Vijayalaya Chola","Rajaraja Chola I","Aditya Chola I","Parantaka Chola I"], a:0},
+  {era:"Pandya Dynasty", q:"The Pandya kingdom had its capital and famed temple city at which location?", opts:["Madurai","Thanjavur","Kanchipuram","Uraiyur"], a:0},
+  {era:"Pandya Dynasty", q:"The Meenakshi Amman Temple, a Pandya-associated landmark, is dedicated to which goddess?", opts:["Meenakshi","Kamakshi","Kanyakumari","Mariamman"], a:0},
+  {era:"Pandya Dynasty", q:"Pandya kings were traditionally famed for trade in which luxury commodity with Rome and other regions?", opts:["Pearls","Silk","Spices only","Ivory only"], a:0},
+  {era:"Pandya Dynasty", q:"Which later Pandya king revived the dynasty's power in the 13th century, expanding it to its greatest extent?", opts:["Jatavarman Sundara Pandyan I","Kulasekara Pandyan","Maravarman Kulasekara I","Parakrama Pandyan"], a:0},
+  {era:"Pallava Dynasty", q:"The Pallava dynasty ruled from which capital city in northern Tamil Nadu?", opts:["Kanchipuram","Thanjavur","Madurai","Vellore"], a:0},
+  {era:"Pallava Dynasty", q:"The Shore Temple and the Five Rathas, carved from single rocks, are found at which Pallava site?", opts:["Mahabalipuram","Kanchipuram","Thanjavur","Chidambaram"], a:0},
+  {era:"Pallava Dynasty", q:"Which Pallava king is credited with initiating rock-cut temple architecture at Mahabalipuram?", opts:["Narasimhavarman I","Mahendravarman I","Nandivarman II","Simhavishnu"], a:1},
+  {era:"Chera Dynasty", q:"The Chera dynasty primarily ruled over which region, corresponding to parts of modern Kerala and western Tamil Nadu?", opts:["Malabar coast region","Coromandel coast region","Deccan plateau region","Northern plains region"], a:0},
+  {era:"Later Kingdoms", q:"The Vijayanagara Empire's governors who later ruled parts of Tamil Nadu independently were known as the?", opts:["Nayaks","Marathas","Nawabs","Zamindars"], a:0},
+  {era:"Later Kingdoms", q:"Which Nayak ruler of Madurai is well known for constructing the famous Thirumalai Nayak Palace?", opts:["Thirumalai Nayak","Vishwanatha Nayak","Muthu Virappa Nayak","Chokkanatha Nayak"], a:0},
+  {era:"Colonial Era", q:"The British East India Company established its first major settlement in Tamil Nadu at which coastal town?", opts:["Fort St. George, Madras","Pondicherry","Nagapattinam","Tuticorin"], a:0},
+  {era:"Colonial Era", q:"Who led the 1801 rebellion against the British as one of the earliest resistance leaders from the Tamil region (Panchalankurichi)?", opts:["Veerapandiya Kattabomman","Marudu Pandiyar","Puli Thevar","Tirupur Kumaran"], a:0},
+  {era:"Freedom Struggle", q:"The Tamil poet and freedom fighter known for patriotic songs like 'Chinnanchiru Kiliye' was?", opts:["Subramania Bharati","Thiru Vi Ka","V. O. Chidambaram Pillai","Bharathidasan"], a:0},
+  {era:"Freedom Struggle", q:"V. O. Chidambaram Pillai is remembered for starting which pioneering enterprise to counter British shipping monopoly?", opts:["Swadeshi Steam Navigation Company","Tamil Nadu Textile Mills","Madras Shipping Corporation","Coromandel Trading Company"], a:0},
+  {era:"Modern Tamil Nadu", q:"Tamil Nadu was formed as a linguistic state (reorganised and renamed from Madras State) in which year?", opts:["1969","1956","1947","1972"], a:0},
+  {era:"Modern Tamil Nadu", q:"Which social reform movement, led by Periyar E. V. Ramasamy, strongly influenced 20th-century Tamil Nadu politics?", opts:["Self-Respect Movement","Bhakti Movement","Non-Cooperation Movement","Temple Entry Movement only"], a:0},
+  {era:"Development", q:"Tamil Nadu has consistently ranked among the top Indian states in which key development indicator, driven by strong public health investment?", opts:["Human Development Index / health indicators","Lowest population","Largest land area","Highest rainfall"], a:0},
+  {era:"Development", q:"Which city, a major IT and automobile manufacturing hub, is Tamil Nadu's capital?", opts:["Chennai","Coimbatore","Madurai","Salem"], a:0},
+  {era:"Development", q:"Tamil Nadu is often called the 'Detroit of India' because of its strength in which industry?", opts:["Automobile manufacturing","Software services only","Textiles only","Agriculture only"], a:0},
+  {era:"Heritage", q:"The UNESCO World Heritage 'Great Living Chola Temples' include Brihadeeswarar Temple, Gangaikondacholapuram, and which third temple?", opts:["Airavatesvara Temple, Darasuram","Meenakshi Temple, Madurai","Ranganathaswamy Temple, Srirangam","Kapaleeshwarar Temple, Chennai"], a:0},
+  {era:"Heritage", q:"Bharatanatyam, one of India's classical dance forms, originated and developed as a temple art tradition in which state?", opts:["Tamil Nadu","Kerala","Odisha","Andhra Pradesh"], a:0}
+];
+
+let current = 0;
+let score = 0;
+let answered = false;
+let playerName = "Player";
+
+function startQuiz(){
+  const nameInput = document.getElementById('playerName').value.trim();
+  playerName = nameInput.length ? nameInput : "Player";
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('quizScreen').classList.remove('hidden');
+  current = 0;
+  score = 0;
+  showQuestion();
+}
+
+function showQuestion(){
+  answered = false;
+  const item = QUESTIONS[current];
+  document.getElementById('qEra').textContent = item.era;
+  document.getElementById('qText').textContent = item.q;
+  document.getElementById('qCounter').textContent = `Question ${current+1} / ${QUESTIONS.length}`;
+  document.getElementById('liveScore').textContent = `Score: ${score}`;
+  document.getElementById('progressFill').style.width = `${(current/QUESTIONS.length)*100}%`;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('nextBtn').classList.add('hidden');
+
+  const box = document.getElementById('optionsBox');
+  box.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  item.opts.forEach((opt, idx) => {
+    const div = document.createElement('div');
+    div.className = 'opt';
+    div.innerHTML = `<span class="letter">${letters[idx]}</span><span>${opt}</span>`;
+    div.onclick = () => selectAnswer(idx, div);
+    box.appendChild(div);
+  });
+}
+
+function selectAnswer(idx, el){
+  if(answered) return;
+  answered = true;
+  const item = QUESTIONS[current];
+  const allOpts = document.querySelectorAll('#optionsBox .opt');
+  allOpts.forEach(o => o.classList.add('disabled'));
+
+  const feedback = document.getElementById('feedback');
+  if(idx === item.a){
+    score++;
+    el.classList.add('correct');
+    feedback.textContent = 'Correct! ' + rightNote();
+    feedback.className = 'feedback good';
+  } else {
+    el.classList.add('wrong');
+    allOpts[item.a].classList.add('correct');
+    feedback.textContent = 'Not quite — the highlighted option is correct.';
+    feedback.className = 'feedback bad';
+  }
+  document.getElementById('liveScore').textContent = `Score: ${score}`;
+  document.getElementById('nextBtn').classList.remove('hidden');
+  document.getElementById('nextBtn').textContent = (current === QUESTIONS.length - 1) ? 'See Result →' : 'Next →';
+}
+
+function rightNote(){
+  const notes = ["Well remembered.","Strong knowledge of Tamil history.","Excellent recall.","Impressive."];
+  return notes[Math.floor(Math.random()*notes.length)];
+}
+
+function nextQuestion(){
+  current++;
+  if(current >= QUESTIONS.length){
+    showResult();
+  } else {
+    showQuestion();
+  }
+}
+
+function showResult(){
+  document.getElementById('quizScreen').classList.add('hidden');
+  document.getElementById('result').classList.remove('hidden');
+  document.getElementById('finalScore').textContent = score;
+
+  const pct = score / QUESTIONS.length;
+  let title, sub, medal, desc;
+
+  if(pct === 1){
+    title = "Emperor Rajaraja Chola"; medal = "👑";
+    sub = "A flawless reign — perfect score!";
+    desc = "has achieved a perfect score and earned the supreme title of Emperor Rajaraja Chola in the Tamil Nadu Heritage Challenge";
+  } else if(pct >= 0.85){
+    title = "Chola Emperor"; medal = "🏆";
+    sub = "Master of the Heritage Challenge";
+    desc = "has earned the title of Chola Emperor in the Tamil Nadu Heritage Challenge";
+  } else if(pct >= 0.7){
+    title = "Pandya Prince"; medal = "🥇";
+    sub = "A ruler of great learning";
+    desc = "has earned the title of Pandya Prince in the Tamil Nadu Heritage Challenge";
+  } else if(pct >= 0.55){
+    title = "Pallava Scholar"; medal = "🥈";
+    sub = "Well versed in the arts of the land";
+    desc = "has earned the title of Pallava Scholar in the Tamil Nadu Heritage Challenge";
+  } else if(pct >= 0.4){
+    title = "Sangam Poet"; medal = "🥉";
+    sub = "A promising student of history";
+    desc = "has earned the title of Sangam Poet in the Tamil Nadu Heritage Challenge";
+  } else {
+    title = "Young Apprentice"; medal = "📜";
+    sub = "Every great ruler starts somewhere";
+    desc = "has completed the Tamil Nadu Heritage Challenge as a Young Apprentice — more history awaits!";
+  }
+
+  document.getElementById('medalIcon').textContent = medal;
+  document.getElementById('rewardTitle').textContent = title;
+  document.getElementById('rewardSub').textContent = sub;
+  document.getElementById('certName').textContent = playerName;
+  document.getElementById('certDesc').textContent = desc;
+}
+
+function restartQuiz(){
+  document.getElementById('result').classList.add('hidden');
+  document.getElementById('intro').classList.remove('hidden');
+  document.getElementById('playerName').value = playerName === "Player" ? "" : playerName;
+}
+</script>
+</body>
+</html>
